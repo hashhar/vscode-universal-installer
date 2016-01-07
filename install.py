@@ -1,6 +1,7 @@
 #!/usr/local/bin/python
 
 import urllib
+import urllib.request
 import shutil
 import subprocess
 import platform
@@ -33,9 +34,9 @@ def main():
 	else:
 	# Collect the information manually instead of failing
 		print("We were unable to determine your operating system type...")
-		os_type = raw_input("l for Linux, w for Windows, a for Apple OSX: ")
+		os_type = input("l for Linux, w for Windows, a for Apple OSX: ")
 		if os_type == 'l':
-			os_64bit = raw_input("64 bit OS? (y or n): ")
+			os_64bit = input("64 bit OS? (y or n): ")
 
 	# Set the download links according to collected information
 	if os_type == 'w':
@@ -64,7 +65,7 @@ def main():
 		print("This hasn't been implemented yet...Sorry!!!")
 		return
 	elif os_type == 'l':
-		install_dir = raw_input("Where should we install the package? (Full path): ")
+		install_dir = input("Where should we install the package? (Full path): ")
 		# Build the installation commands (unzip, symlink, icon, .desktop files)
 		# BUG: What if no root access?
 		symlink_cmd = "sudo ln -s " + install_dir + "/Code /usr/local/bin/code"
