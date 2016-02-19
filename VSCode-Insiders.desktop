@@ -1,9 +1,9 @@
 [Desktop Entry]
 Type=Application
 Encoding=UTF-8
-Name=Visual Studio Code
+Name=Visual Studio Code - Insiders
 Comment=Code Editing. Redefined. Build and debug modern web and cloud applications.
-Exec=code
-Icon=/usr/share/icons/hicolor/512x512/apps/VSCode.png
+Exec=code-insiders
+Icon=/usr/share/icons/hicolor/512x512/apps/VSCode-Insiders.png
 Terminal=false
 Categories=Development;IDE

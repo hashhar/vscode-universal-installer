@@ -5,26 +5,33 @@ import urllib.request
 import shutil
 import subprocess
 import platform
+import shlex
 
 app_osx_stable_link = "http://go.microsoft.com/fwlink/?LinkID=620882"
 windows_stable_link = "http://go.microsoft.com/fwlink/?LinkID=623230"
 linux64_stable_link = "http://go.microsoft.com/fwlink/?LinkID=620884"
 linux32_stable_link = "http://go.microsoft.com/fwlink/?LinkID=620885"
 
-app_osx_stable_file = "VSCode-darwin.zip"
-windows_stable_file = "VSCodeSetup-stable.exe"
-linux64_stable_file = "VSCode-linux-x64-stable.zip"
-linux32_stable_file = "VSCode-linux-ia32-stable.zip"
+app_osx_stable_file = 'VSCode-darwin.zip'
+windows_stable_file = 'VSCodeSetup-stable.exe'
+linux64_stable_file = 'VSCode-linux-x64-stable.zip'
+linux32_stable_file = 'VSCode-linux-ia32-stable.zip'
 
 app_osx_insider_link = "http://go.microsoft.com/fwlink/?LinkId=723966"
 windows_insider_link = "http://go.microsoft.com/fwlink/?LinkId=723965"
 linux64_insider_link = "http://go.microsoft.com/fwlink/?LinkId=723968"
 linux32_insider_link = "http://go.microsoft.com/fwlink/?LinkId=723969"
 
-app_osx_insider_file = "VSCode-darwin-insider.zip"
-windows_insider_file = "VSCodeSetup-insider.exe"
-linux64_insider_file = "VSCode-linux-x64-insider.zip"
-linux32_insider_file = "VSCode-linux-ia32-insider.zip"
+app_osx_insider_file = 'VSCode-darwin-insider.zip'
+windows_insider_file = 'VSCodeSetup-insider.exe'
+linux64_insider_file = 'VSCode-linux-x64-insider.zip'
+linux32_insider_file = 'VSCode-linux-ia32-insider.zip'
+
+linux64_dirname = 'VSCode-linux-x64/'
+linux32_dirname = 'VSCode-linux-ia32/'
+
+linux_exec_stable = 'Code'
+linux_exec_insider = '"Code - Insiders"'
 
 def main():
 	# Check the channel users want to use
@@ -83,14 +90,14 @@ def main():
 
 	# Hopefully we have got the links right by now
 	# Download the file and take steps depending on the OS
-	download(latest_url, os_type, os_64bit, insider)
+	# download(latest_url, os_type, os_64bit, insider)
 
 	# Insider install
 	if insider == 'y':
 		if os_type == 'w':
 			# Interactive install for Windows users. YAY!!!
 			launch_setup = "./" + windows_insider_file
-			win_install = subprocess.call(launch_setup)
+			win_install = subprocess.call(launch_setup.split())
 			return
 		elif os_type == 'a':
 			# TODO: I don't know anything about OSX
@@ -101,28 +108,28 @@ def main():
 			# Build the installation commands (unzip, symlink, icon, .desktop files)
 			# TODO: What if no root access?
 			if os_64bit == 'y':
-				unzip_cmd = "unzip " + linux64_insider_file + " -d " + install_dir
-				symlink_cmd = "sudo ln -s " + install_dir + linux64_insider_file[0:-4] + "/Code /usr/local/bin/code"
-				icon_cmd = "sudo cp " + install_dir + linux64_insider_file[0:-4] + "/resources/app/resources/linux/VSCode.png /usr/share/icons/hicolor/512x512/apps/VSCode.png"
+				unzip_cmd = 'sudo unzip ' + linux64_insider_file + ' -d ' + install_dir
+				symlink_cmd = 'sudo ln -s ' + install_dir + linux64_dirname + linux_exec_insider + ' /usr/local/bin/code-insiders'
+				icon_cmd = 'sudo cp ' + install_dir + linux64_dirname + '/resources/app/resources/linux/code.png /usr/share/icons/hicolor/512x512/apps/VSCode-Insiders.png'
 			else:
-				unzip_cmd = "unzip " + linux32_insider_file + " -d " + install_dir
-				symlink_cmd = "sudo ln -s " + install_dir + linux32_insider_file[0:-4] + "/Code /usr/local/bin/code"
-				icon_cmd = "sudo cp " + install_dir + linux32_insider_file[0:-4] + "/resources/app/resources/linux/VSCode.png /usr/share/icons/hicolor/512x512/apps/VSCode.png"
+				unzip_cmd = 'sudo unzip ' + linux32_insider_file + ' -d ' + install_dir
+				symlink_cmd = 'sudo ln -s ' + install_dir + linux32_dirname + linux_exec_insider + ' /usr/local/bin/code-insiders'
+				icon_cmd = 'sudo cp ' + install_dir + linux32_dirname + '/resources/app/resources/linux/code.png /usr/share/icons/hicolor/512x512/apps/VSCode-Insiders.png'
 			# The desktop file is common to everyone
-			desktop_file_cmd = "sudo cp " + "VSCode.desktop /usr/share/applications/VSCode.desktop"
+			desktop_file_cmd = 'sudo cp ' + 'VSCode-Insiders.desktop /usr/share/applications/VSCode-Insiders.desktop'
 
 			# Execute the commands
-			unzip_process = subprocess.call(unzip_cmd.split())
-			symlink_process = subprocess.call(symlink_cmd.split())
-			icon_process = subprocess.call(icon_cmd.split())
-			desktop_process = subprocess.call(desktop_file_cmd.split())
-			print("Installation finished. You can run VSCode from the Applications menu or by typing 'code' into a terminal.")
+			unzip_process = subprocess.call(shlex.split(unzip_cmd))
+			symlink_process = subprocess.call(shlex.split(symlink_cmd))
+			icon_process = subprocess.call(shlex.split(icon_cmd))
+			desktop_process = subprocess.call(shlex.split(desktop_file_cmd))
+			print("Installation finished. You can run VSCode - Insiders from the Applications menu or by typing 'code-insiders' into a terminal.")
 	# Stable install
 	else:
 		if os_type == 'w':
 			# Interactive install for Windows users. YAY!!!
 			launch_setup = "./" + windows_stable_file
-			win_install = subprocess.call(launch_setup)
+			win_install = subprocess.call(launch_setup.split())
 			return
 		elif os_type == 'a':
 			# TODO: I don't know anything about OSX
@@ -133,21 +140,21 @@ def main():
 			# Build the installation commands (unzip, symlink, icon, .desktop files)
 			# TODO: What if no root access?
 			if os_64bit == 'y':
-				unzip_cmd = "unzip " + linux64_stable_file + " -d " + install_dir
-				symlink_cmd = "sudo ln -s " + install_dir + linux64_stable_file[0:-4] + "/Code /usr/local/bin/code"
-				icon_cmd = "sudo cp " + install_dir + linux64_stable_file[0:-4] + "/resources/app/resources/linux/VSCode.png /usr/share/icons/hicolor/512x512/apps/VSCode.png"
+				unzip_cmd = 'sudo unzip ' + linux64_stable_file + ' -d ' + install_dir
+				symlink_cmd = 'sudo ln -s ' + install_dir + linux64_dirname + linux_exec_stable + ' /usr/local/bin/code'
+				icon_cmd = 'sudo cp ' + install_dir + linux64_dirname + '/resources/app/resources/linux/code.png /usr/share/icons/hicolor/512x512/apps/VSCode.png'
 			else:
-				unzip_cmd = "unzip " + linux32_stable_file + " -d " + install_dir
-				symlink_cmd = "sudo ln -s " + install_dir + linux32_stable_file[0:-4] + "/Code /usr/local/bin/code"
-				icon_cmd = "sudo cp " + install_dir + linux32_stable_file[0:-4] + "/resources/app/resources/linux/VSCode.png /usr/share/icons/hicolor/512x512/apps/VSCode.png"
+				unzip_cmd = 'sudo unzip ' + linux32_stable_file + ' -d ' + install_dir
+				symlink_cmd = 'sudo ln -s ' + install_dir + linux32_dirname + linux_exec_stable + ' /usr/local/bin/code'
+				icon_cmd = 'sudo cp ' + install_dir + linux32_dirname + '/resources/app/resources/linux/code.png /usr/share/icons/hicolor/512x512/apps/VSCode.png'
 			# The desktop file is common to everyone
-			desktop_file_cmd = "sudo cp " + "VSCode.desktop /usr/share/applications/VSCode.desktop"
+			desktop_file_cmd = 'sudo cp ' + 'VSCode.desktop /usr/share/applications/VSCode.desktop'
 
 			# Execute the commands
-			unzip_process = subprocess.call(unzip_cmd.split())
-			symlink_process = subprocess.call(symlink_cmd.split())
-			icon_process = subprocess.call(icon_cmd.split())
-			desktop_process = subprocess.call(desktop_file_cmd.split())
+			unzip_process = subprocess.call(shlex.split(unzip_cmd))
+			symlink_process = subprocess.call(shlex.split(symlink_cmd))
+			icon_process = subprocess.call(shlex.split(icon_cmd))
+			desktop_process = subprocess.call(shlex.split(desktop_file_cmd))
 			print("Installation finished. You can run VSCode from the Applications menu or by typing 'code' into a terminal.")
 	# Return, we are done
 	return
@@ -182,6 +189,7 @@ def download(latest_url, os_type, os_64bit, insider):
 	with urllib.request.urlopen(latest_url) as response, open(file_name, 'wb') as out_file:
 		print("Please wait... The download is in progress.")
 		shutil.copyfileobj(response, out_file)
+		print("Download finished.")
 	return
 
 if __name__ == '__main__':
