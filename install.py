@@ -90,7 +90,7 @@ def main():
 		if os_type == 'w':
 			# Interactive install for Windows users. YAY!!!
 			launch_setup = "./" + windows_insider_file
-			win_install = subprocess.run(launch_setup)
+			win_install = subprocess.call(launch_setup)
 			return
 		elif os_type == 'a':
 			# TODO: I don't know anything about OSX
@@ -112,17 +112,17 @@ def main():
 			desktop_file_cmd = "sudo cp " + "VSCode.desktop /usr/share/applications/VSCode.desktop"
 
 			# Execute the commands
-			unzip_process = subprocess.run(unzip_cmd.split(), stdout=subprocess.PIPE)
-			symlink_process = subprocess.run(symlink_cmd.split(), stdout=subprocess.PIPE)
-			icon_process = subprocess.run(icon_cmd.split(), stdout=subprocess.PIPE)
-			desktop_process = subprocess.run(desktop_file_cmd.split(), stdout=subprocess.PIPE)
+			unzip_process = subprocess.call(unzip_cmd.split())
+			symlink_process = subprocess.call(symlink_cmd.split())
+			icon_process = subprocess.call(icon_cmd.split())
+			desktop_process = subprocess.call(desktop_file_cmd.split())
 			print("Installation finished. You can run VSCode from the Applications menu or by typing 'code' into a terminal.")
 	# Stable install
 	else:
 		if os_type == 'w':
 			# Interactive install for Windows users. YAY!!!
 			launch_setup = "./" + windows_stable_file
-			win_install = subprocess.run(launch_setup)
+			win_install = subprocess.call(launch_setup)
 			return
 		elif os_type == 'a':
 			# TODO: I don't know anything about OSX
@@ -144,10 +144,10 @@ def main():
 			desktop_file_cmd = "sudo cp " + "VSCode.desktop /usr/share/applications/VSCode.desktop"
 
 			# Execute the commands
-			unzip_process = subprocess.run(unzip_cmd.split(), stdout=subprocess.PIPE)
-			symlink_process = subprocess.run(symlink_cmd.split(), stdout=subprocess.PIPE)
-			icon_process = subprocess.run(icon_cmd.split(), stdout=subprocess.PIPE)
-			desktop_process = subprocess.run(desktop_file_cmd.split(), stdout=subprocess.PIPE)
+			unzip_process = subprocess.call(unzip_cmd.split())
+			symlink_process = subprocess.call(symlink_cmd.split())
+			icon_process = subprocess.call(icon_cmd.split())
+			desktop_process = subprocess.call(desktop_file_cmd.split())
 			print("Installation finished. You can run VSCode from the Applications menu or by typing 'code' into a terminal.")
 	# Return, we are done
 	return
