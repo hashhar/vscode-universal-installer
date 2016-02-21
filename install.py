@@ -90,7 +90,7 @@ def main():
 
 	# Hopefully we have got the links right by now
 	# Download the file and take steps depending on the OS
-	# download(latest_url, os_type, os_64bit, insider)
+	download(latest_url, os_type, os_64bit, insider)
 
 	# Insider install
 	if insider == 'y':
